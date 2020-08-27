@@ -1,10 +1,10 @@
-package br.com.bandtec.pokedex;
+package br.com.bandtec.livraria;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class PokedexApplicationTests {
+class LivrariaApplicationTests {
 
 	@Test
 	void contextLoads() {

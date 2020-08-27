@@ -1,13 +1,13 @@
-package br.com.bandtec.pokedex;
+package br.com.bandtec.livraria;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class PokedexApplication {
+public class LivrariaApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(PokedexApplication.class, args);
+		SpringApplication.run(LivrariaApplication.class, args);
 	}
 
 }

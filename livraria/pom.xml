@@ -9,10 +9,10 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>br.com.bandtec</groupId>
-	<artifactId>pokedex</artifactId>
+	<artifactId>livraria</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>pokedex</name>
-	<description>Projeto primeira Spring</description>
+	<name>livraria</name>
+	<description>Projeto primeira sprint</description>
 
 	<properties>
 		<java.version>1.8</java.version>
