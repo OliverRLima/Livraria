@@ -17,6 +17,9 @@ public class Descontos {
         this.listaDesconto.add(desconto);
     }
 
+    public void excluiDesconto(int posicao){
+        listaDesconto.remove(posicao);
+    }
     public ArrayList<Desconto> getDescontos(){
         return (ArrayList<Desconto>) this.listaDesconto;
     }

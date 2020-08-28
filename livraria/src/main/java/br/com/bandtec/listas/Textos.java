@@ -82,9 +82,11 @@ public class Textos {
     }
 
     public void excluirTexto(int posicao){
-        System.out.println(listaTextos.size());
         listaTextos.remove(posicao);
-        System.out.println(listaTextos.size());
+    }
+
+    public Texto getObjeto(int posicao){
+        return listaTextos.get(posicao);
     }
 
     public Integer getSize(){

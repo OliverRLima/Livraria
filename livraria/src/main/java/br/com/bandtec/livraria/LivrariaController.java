@@ -1,6 +1,7 @@
 package br.com.bandtec.livraria;
 
 import br.com.bandtec.classes.*;
+import br.com.bandtec.listas.Descontos;
 import br.com.bandtec.listas.Textos;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -13,12 +14,14 @@ import java.util.List;
 public class LivrariaController {
 
     private Textos textos = new Textos();
+    private Descontos descontos = new Descontos();
 
     private Boolean primeiraAdicao = true;
 
     private void adicionaConteudoInicial(){
 
         primeiraAdicao = false;
+
         Livro livro = new Livro("A Guerra dos tronos","O início da épica saga de George R.R.Martin",
                 "George R.R.Martin","LeYa", 1057, 30, 10.0);
 
@@ -43,6 +46,8 @@ public class LivrariaController {
 
         TextoUsuario textoUsuario3 = new TextoUsuario("Mais uma história", "Mais uma história", "Historiador",
                 "Primeiro capítulo", "Agora a criatividade falhou...");
+
+        descontos.adicionaDesconto(quadrinho);
 
         textos.adicionaTexto(livro);
         textos.adicionaTexto(manga);
@@ -90,15 +95,27 @@ public class LivrariaController {
     @GetMapping("/excluir/{parametro}")
     public String excluirTextoUsuario(@PathVariable int parametro){
 
+        Texto temDesconto = textos.getObjeto(--parametro);
+
         if(parametro < 0 ){
             return "Não há nada nessa posição";
         } else if(parametro >= 0 && parametro <= textos.getSize()){
-            parametro--;
-            textos.excluirTexto(parametro);
+            textos.excluirTexto(--parametro);
+
+            System.out.println(temDesconto);
+
+            if(temDesconto instanceof Desconto){
+                descontos.excluiDesconto(--parametro);
+            }
+
             return "Excluido";
         }
 
         return "Não há nada nessa posição";
     }
-    
+
+    @GetMapping("/desconto")
+    public ArrayList<Desconto> getDesconto(){
+        return this.descontos.getDescontos();
+    }
 }

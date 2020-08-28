@@ -1,6 +1,6 @@
 package br.com.bandtec.classes;
 
-public class Quadrinho extends Produto{
+public class Quadrinho extends Produto implements Desconto{
 
     public Quadrinho(String nome, String descricao, String autor, String editora, Integer numeroPaginas, Integer quantidadeEsoque, Double preco) {
         super(nome, descricao, autor, editora, numeroPaginas, quantidadeEsoque, preco);
@@ -21,6 +21,11 @@ public class Quadrinho extends Produto{
 
     @Override
     public String toString() {
-        return String.format("Quadrinho{%s}", super.toString());
+        return String.format("Quadrinho{%s, com desconto =%.2f}", super.toString(),this.getDesconto());
+    }
+
+    @Override
+    public Double getDesconto() {
+        return this.getPreco() * 0.9;
     }
 }

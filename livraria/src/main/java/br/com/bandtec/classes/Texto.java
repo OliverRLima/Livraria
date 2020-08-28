@@ -1,6 +1,6 @@
 package br.com.bandtec.classes;
 
-public class Texto {
+public abstract class Texto {
 
     private String nome, descricao, autor;
 
