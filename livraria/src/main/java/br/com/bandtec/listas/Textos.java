@@ -80,4 +80,14 @@ public class Textos {
 
         return produtos;
     }
+
+    public void excluirTexto(int posicao){
+        System.out.println(listaTextos.size());
+        listaTextos.remove(posicao);
+        System.out.println(listaTextos.size());
+    }
+
+    public Integer getSize(){
+        return listaTextos.size();
+    }
 }

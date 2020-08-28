@@ -6,7 +6,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.websocket.server.PathParam;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,13 +35,21 @@ public class LivrariaController {
                         "Conta os eventos que levaram Bruce Wayne a se tornar o Batman e seu primeiro ano no combate ao crime.",
                 "Frank Miller", "Panini Books", 104, 20, 40.0);
 
-        TextoUsuario textoUsuario = new TextoUsuario("Uma história", "Sobre uma história", "Historiador",
+        TextoUsuario textoUsuario1 = new TextoUsuario("Uma história", "Sobre uma história", "Historiador",
                 "Primeiro capítulo", "Era uma vez, ou talvez não...");
+
+        TextoUsuario textoUsuario2 = new TextoUsuario("Outra história", "Aquela outra história", "Historiador",
+                "Primeiro capítulo", "Em um lugar muito distante...");
+
+        TextoUsuario textoUsuario3 = new TextoUsuario("Mais uma história", "Mais uma história", "Historiador",
+                "Primeiro capítulo", "Agora a criatividade falhou...");
 
         textos.adicionaTexto(livro);
         textos.adicionaTexto(manga);
         textos.adicionaTexto(quadrinho);
-        textos.adicionaTexto(textoUsuario);
+        textos.adicionaTexto(textoUsuario1);
+        textos.adicionaTexto(textoUsuario2);
+        textos.adicionaTexto(textoUsuario3);
     }
 
 
@@ -56,10 +63,10 @@ public class LivrariaController {
     public List<? extends Texto> getTextos(@PathVariable String parametro){
         ArrayList<Texto> listaVazia = new ArrayList<>();
 
-        if(primeiraAdicao){
+        if(primeiraAdicao == true){
             adicionaConteudoInicial();
         }
-        
+
         switch (parametro){
             case "produtos":
                 return this.textos.getProdutos();
@@ -79,4 +86,19 @@ public class LivrariaController {
 
         return listaVazia;
     }
+
+    @GetMapping("/excluir/{parametro}")
+    public String excluirTextoUsuario(@PathVariable int parametro){
+
+        if(parametro < 0 ){
+            return "Não há nada nessa posição";
+        } else if(parametro >= 0 && parametro <= textos.getSize()){
+            parametro--;
+            textos.excluirTexto(parametro);
+            return "Excluido";
+        }
+
+        return "Não há nada nessa posição";
+    }
+    
 }
