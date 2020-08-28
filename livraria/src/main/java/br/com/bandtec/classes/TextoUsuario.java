@@ -4,8 +4,10 @@ public class TextoUsuario extends Texto{
 
     private String titulo, enredo;
 
-    public TextoUsuario(String nome, String descricao, String autor) {
+    public TextoUsuario(String nome, String descricao, String autor, String titulo, String enredo) {
         super(nome, descricao, autor);
+        this.titulo = titulo;
+        this.enredo = enredo;
     }
 
     public void adicionaTitulo(String titulo){
