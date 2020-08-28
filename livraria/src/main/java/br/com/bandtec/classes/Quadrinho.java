@@ -1,4 +1,4 @@
-package Classes;
+package br.com.bandtec.classes;
 
 public class Quadrinho extends Produto{
 
@@ -8,11 +8,19 @@ public class Quadrinho extends Produto{
 
     @Override
     public Double getPreco() {
-        return null;
+        Double precoModerado = (getValorCompra() * 5) / (getQuantidadeEstoque() * 0.05);
+
+        if(precoModerado > 150){
+            return 150.0;
+        } else if (precoModerado < 10) {
+            return 20.0;
+        }
+
+        return precoModerado;
     }
 
     @Override
     public String toString() {
-        return "Quadrinho";
+        return String.format("Quadrinho{%s}", super.toString());
     }
 }

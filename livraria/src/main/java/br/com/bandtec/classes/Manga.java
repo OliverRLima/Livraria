@@ -1,4 +1,4 @@
-package Classes;
+package br.com.bandtec.classes;
 
 public class Manga extends Produto{
 
@@ -8,11 +8,19 @@ public class Manga extends Produto{
 
     @Override
     public Double getPreco() {
-        return null;
+        Double precoModerado = (getValorCompra() * 5) / (getQuantidadeEstoque() * 0.05);
+
+        if(precoModerado > 200){
+            return 200.0;
+        } else if (precoModerado < 30) {
+            return 30.0;
+        }
+
+        return precoModerado;
     }
 
     @Override
     public String toString() {
-        return "Manga";
+        return String.format("Manga{%s}", super.toString());
     }
 }
