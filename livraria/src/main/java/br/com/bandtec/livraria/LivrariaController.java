@@ -3,6 +3,7 @@ package br.com.bandtec.livraria;
 import br.com.bandtec.classes.*;
 import br.com.bandtec.listas.Descontos;
 import br.com.bandtec.listas.Textos;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -92,26 +93,17 @@ public class LivrariaController {
         return listaVazia;
     }
 
-    @GetMapping("/excluir/{parametro}")
-    public String excluirTextoUsuario(@PathVariable int parametro){
+    @DeleteMapping("/excluir/{parametro}")
+    public void excluirTextoUsuario(@PathVariable int parametro){
 
-        Texto temDesconto = textos.getObjeto(--parametro);
+        Texto temDesconto = textos.getObjeto(parametro -1);
 
-        if(parametro < 0 ){
-            return "Não há nada nessa posição";
-        } else if(parametro >= 0 && parametro <= textos.getSize()){
-            textos.excluirTexto(--parametro);
+        textos.excluirTexto(parametro - 1);
 
-            System.out.println(temDesconto);
-
-            if(temDesconto instanceof Desconto){
-                descontos.excluiDesconto(--parametro);
-            }
-
-            return "Excluido";
+        if(temDesconto instanceof Desconto){
+            descontos.excluiDesconto(parametro - 1);
         }
 
-        return "Não há nada nessa posição";
     }
 
     @GetMapping("/desconto")
