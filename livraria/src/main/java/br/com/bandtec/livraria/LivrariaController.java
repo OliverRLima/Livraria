@@ -1,27 +1,25 @@
 package br.com.bandtec.livraria;
 
 import br.com.bandtec.classes.*;
-import br.com.bandtec.listas.Descontos;
-import br.com.bandtec.listas.Textos;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
+@RequestMapping("/livraria")
 public class LivrariaController {
 
-    private Textos textos = new Textos();
-    private Descontos descontos = new Descontos();
+    private List<Texto> textos = new ArrayList<>();
+    private List<Desconto> descontos = new ArrayList<>();
 
     private Boolean primeiraAdicao = true;
 
     private void adicionaConteudoInicial(){
 
-        primeiraAdicao = false;
+        this.primeiraAdicao = false;
 
         Livro livro = new Livro("A Guerra dos tronos","O início da épica saga de George R.R.Martin",
                 "George R.R.Martin","LeYa", 1057, 30, 10.0);
@@ -48,66 +46,82 @@ public class LivrariaController {
         TextoUsuario textoUsuario3 = new TextoUsuario("Mais uma história", "Mais uma história", "Historiador",
                 "Primeiro capítulo", "Agora a criatividade falhou...");
 
-        descontos.adicionaDesconto(quadrinho);
+        descontos.add(quadrinho);
 
-        textos.adicionaTexto(livro);
-        textos.adicionaTexto(manga);
-        textos.adicionaTexto(quadrinho);
-        textos.adicionaTexto(textoUsuario1);
-        textos.adicionaTexto(textoUsuario2);
-        textos.adicionaTexto(textoUsuario3);
+        textos.add(livro);
+        textos.add(manga);
+        textos.add(quadrinho);
+        textos.add(textoUsuario1);
+        textos.add(textoUsuario2);
+        textos.add(textoUsuario3);
     }
 
 
     @GetMapping
-    public String getHome(){
-        return "Bem vinda a Livraria! \n Compre livros, mangas ou quadrinhos e se quiser divulgue seus " +
-                "textos aqui.";
+    public ResponseEntity getHome(){
+        if (textos.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.ok(textos);
+        }
     }
 
-    @GetMapping("/explorar/{parametro}")
-    public List<? extends Texto> getTextos(@PathVariable String parametro){
-        ArrayList<Texto> listaVazia = new ArrayList<>();
+    @GetMapping("/{parametro}")
+    public ResponseEntity getTextos(@PathVariable String parametro){
 
         if(primeiraAdicao == true){
             adicionaConteudoInicial();
         }
+        ArrayList<Texto> listaTexto = new ArrayList<>();
 
         switch (parametro){
-            case "produtos":
-                return this.textos.getProdutos();
             case "livros":
-                return this.textos.getLivros();
+                listaTexto = (ArrayList<Texto>) textos.stream()
+                        .filter(texto -> texto instanceof Livro)
+                        .collect(Collectors.toList());
+                break;
             case "mangas":
-                return this.textos.getMangas();
+                listaTexto = (ArrayList<Texto>) textos.stream()
+                        .filter(texto -> texto instanceof Manga)
+                        .collect(Collectors.toList());
+                break;
             case "quadrinhos":
-                return this.textos.getQuadrinhos();
+                listaTexto = (ArrayList<Texto>) textos.stream()
+                        .filter(texto -> texto instanceof Quadrinho)
+                        .collect(Collectors.toList());
+                break;
             case "textos":
-                return this.textos.getTextoUsuario();
-            case "tudo":
-                return this.textos.getTextos();
+                listaTexto = (ArrayList<Texto>) textos.stream()
+                        .filter(texto -> texto instanceof Texto)
+                        .collect(Collectors.toList());
+                break;
             default:
                 break;
         }
 
-        return listaVazia;
+        if (listaTexto.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.ok(listaTexto);
+        }
     }
 
-    @DeleteMapping("/excluir/{parametro}")
+    @DeleteMapping("/{parametro}")
     public void excluirTextoUsuario(@PathVariable int parametro){
+        textos.remove(parametro - 1);
 
-        Texto temDesconto = textos.getObjeto(parametro -1);
-
-        textos.excluirTexto(parametro - 1);
-
-        if(temDesconto instanceof Desconto){
-            descontos.excluiDesconto(parametro - 1);
+        if(textos.get(parametro - 1) instanceof Desconto){
+            descontos.remove(parametro - 1);
         }
 
     }
 
     @GetMapping("/desconto")
-    public ArrayList<Desconto> getDesconto(){
-        return this.descontos.getDescontos();
+    public ResponseEntity getDesconto(){
+        if (descontos.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        } else {
+            return ResponseEntity.ok(descontos);
+        }
     }
 }
