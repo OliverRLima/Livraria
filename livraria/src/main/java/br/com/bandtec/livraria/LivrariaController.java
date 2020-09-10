@@ -107,12 +107,23 @@ public class LivrariaController {
     }
 
     @DeleteMapping("/{parametro}")
-    public void excluirTextoUsuario(@PathVariable int parametro){
-        textos.remove(parametro - 1);
+    public ResponseEntity excluirTextoUsuario(@PathVariable int parametro){
+        if (textos.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        } else if(textos.size() < parametro){
+            return ResponseEntity.notFound().build();
+        } else{
 
-        if(textos.get(parametro - 1) instanceof Desconto){
-            descontos.remove(parametro - 1);
+            Texto temDesconto = textos.get(parametro - 1);
+            textos.remove(parametro - 1);
+
+            if(temDesconto instanceof Desconto){
+                descontos.remove(temDesconto);
+            }
+
+            return ResponseEntity.ok().build();
         }
+
 
     }
 
